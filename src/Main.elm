@@ -1,6 +1,10 @@
 module Main exposing (main)
 
 import Browser
+import Element exposing (centerX, el, layout, padding, rgba255)
+import Element.Background exposing (color)
+import Element.Font exposing (color)
+import Element.Input exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -61,17 +65,29 @@ view model =
     in
     { title = "onamae seal maker"
     , body =
-        [ header [ class "site-header" ]
-            [ h1 [] [ text "おなまえシールめーかー" ]
-            ]
-        , main_ []
-            [ article
-                []
-                [ input [ onInput InputName ] []
-                , button [ onClick Decrement ] [ text "-" ]
+        [ Element.layout [ Element.Background.color (rgba255 223 107 160 100), Element.Font.color (rgba255 0 0 0 100) ] <|
+            Element.row [ centerX, padding 30 ]
+                [ Element.el [] (Element.text "おなまえシールめ〜か〜")
                 ]
-            ]
         ]
+
+    -- [ header [ class "site-header" ]
+    --     [ h1 [] [ Html.text "おなまえシールめーかー" ]
+    --     ]
+    -- , main_ []
+    --     [ article
+    --         []
+    --         [ Element.layout [] <|
+    --             Element.Input.text
+    --                 []
+    --                 { onChange = \n -> InputName n
+    --                 , text = name
+    --                 , placeholder = Nothing
+    --                 , label = Element.Input.labelHidden "text"
+    --                 }
+    --         ]
+    --     ]
+    -- ]
     }
 
 
