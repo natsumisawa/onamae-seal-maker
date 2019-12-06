@@ -65,7 +65,7 @@ view model =
     in
     { title = "onamae seal maker"
     , body =
-        [ Element.layout [ Element.Background.color (rgba255 223 107 160 100), Element.Font.color (rgba255 0 0 0 100) ] <|
+        [ Element.layout [ Element.Background.color (rgba255 223 107 160 100), Element.Font.color (rgba255 255 255 255 100) ] <|
             Element.row [ centerX, padding 30 ]
                 [ Element.el [] (Element.text "おなまえシールめ〜か〜")
                 ]
