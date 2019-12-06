@@ -79,36 +79,43 @@ view model =
         column [ padding 30, spacing 30, centerX ]
             [ el [ color (rgba255 255 255 255 100), centerX, size 40 ] (Element.text "おなまえシールめーかー")
             , Element.Input.text
-                []
+                [ width (px 400), centerX ]
                 { onChange = \n -> InputName n
                 , text = name
                 , placeholder = Just <| placeholder [] (Element.text "おなまえ")
-                , label = labelHidden "text"
+                , label = labelHidden "name"
                 }
-            , row [ spacing 5 ] <|
-                List.map
-                    (\index ->
-                        el
-                            [ onClick <| OnClickButton index
-                            , rounded 50
-                            , padding 5
-                            , Element.Background.color (rgba255 255 255 255 100)
-                            ]
-                        <|
-                            image
-                                [ width <| px 50
-                                , if clickedIndexList |> List.member index then
-                                    alpha 0.5
-
-                                  else
-                                    alpha 1
-                                ]
-                                { src = "assets/" ++ String.fromInt index ++ ".PNG"
-                                , description = ""
-                                }
-                    )
-                    (List.range 1 21)
+            , buttonsView 1 clickedIndexList
+            , buttonsView 7 clickedIndexList
+            , buttonsView 14 clickedIndexList
             ]
+
+
+buttonsView : Int -> List Int -> Element.Element Msg
+buttonsView startIndex clickedIndexList =
+    row [ spacing 5 ] <|
+        List.map
+            (\i ->
+                el
+                    [ onClick <| OnClickButton i
+                    , rounded 50
+                    , padding 5
+                    , Element.Background.color (rgba255 255 255 255 100)
+                    ]
+                <|
+                    image
+                        [ width <| px 50
+                        , if clickedIndexList |> List.member i then
+                            alpha 0.5
+
+                          else
+                            alpha 1
+                        ]
+                        { src = "assets/" ++ String.fromInt i ++ ".PNG"
+                        , description = ""
+                        }
+            )
+            (List.range startIndex (startIndex + 7))
 
 
 main : Program () Model Msg
