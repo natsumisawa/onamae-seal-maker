@@ -1,13 +1,15 @@
 module Main exposing (main)
 
 import Browser
-import Element exposing (centerX, el, layout, padding, rgba255)
+import Element exposing (Length, alignLeft, alpha, centerX, column, el, fill, fillPortion, image, layout, maximum, padding, px, rgba255, row, spacing, text, width)
 import Element.Background exposing (color)
-import Element.Font exposing (color)
-import Element.Input exposing (..)
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
+import Element.Border exposing (rounded)
+import Element.Events exposing (onClick)
+import Element.Font exposing (color, size)
+import Element.Input exposing (labelHidden, placeholder, text)
+import Html exposing (Html)
+import Html.Attributes
+import Html.Events
 
 
 
@@ -18,12 +20,13 @@ import Html.Events exposing (..)
 
 type alias Model =
     { name : String
+    , clickedIndexList : List Int
     }
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( { name = "" }, Cmd.none )
+    ( { name = "", clickedIndexList = [] }, Cmd.none )
 
 
 
@@ -34,21 +37,30 @@ init _ =
 
 type Msg
     = InputName String
-    | Decrement
+    | OnClickButton Int
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     let
-        { name } =
+        { name, clickedIndexList } =
             model
     in
     case msg of
         InputName n ->
             ( { model | name = n }, Cmd.none )
 
-        Decrement ->
-            ( { model | name = "b" }, Cmd.none )
+        OnClickButton index ->
+            ( { model
+                | clickedIndexList =
+                    if clickedIndexList |> List.member index then
+                        clickedIndexList |> List.filter (\i -> i /= index)
+
+                    else
+                        index :: clickedIndexList
+              }
+            , Cmd.none
+            )
 
 
 
@@ -57,49 +69,51 @@ update msg model =
 -- ---------------------------
 
 
-view : Model -> Browser.Document Msg
+view : Model -> Html Msg
 view model =
     let
-        { name } =
+        { name, clickedIndexList } =
             model
     in
-    { title = "onamae seal maker"
-    , body =
-        [ Element.layout [ Element.Background.color (rgba255 223 107 160 100), Element.Font.color (rgba255 255 255 255 100) ] <|
-            Element.row [ centerX, padding 30 ]
-                [ Element.el [] (Element.text "おなまえシールめ〜か〜")
-                ]
-        ]
+    layout [ Element.Background.color (rgba255 223 107 160 100) ] <|
+        column [ padding 30, spacing 30, centerX ]
+            [ el [ color (rgba255 255 255 255 100), centerX, size 40 ] (Element.text "おなまえシールめーかー")
+            , Element.Input.text
+                []
+                { onChange = \n -> InputName n
+                , text = name
+                , placeholder = Just <| placeholder [] (Element.text "おなまえ")
+                , label = labelHidden "text"
+                }
+            , row [ spacing 5 ] <|
+                List.map
+                    (\index ->
+                        el
+                            [ onClick <| OnClickButton index
+                            , rounded 50
+                            , padding 5
+                            , Element.Background.color (rgba255 255 255 255 100)
+                            ]
+                        <|
+                            image
+                                [ width <| px 50
+                                , if clickedIndexList |> List.member index then
+                                    alpha 0.5
 
-    -- [ header [ class "site-header" ]
-    --     [ h1 [] [ Html.text "おなまえシールめーかー" ]
-    --     ]
-    -- , main_ []
-    --     [ article
-    --         []
-    --         [ Element.layout [] <|
-    --             Element.Input.text
-    --                 []
-    --                 { onChange = \n -> InputName n
-    --                 , text = name
-    --                 , placeholder = Nothing
-    --                 , label = Element.Input.labelHidden "text"
-    --                 }
-    --         ]
-    --     ]
-    -- ]
-    }
-
-
-
--- ---------------------------
--- MAIN
--- ---------------------------
+                                  else
+                                    alpha 1
+                                ]
+                                { src = "assets/" ++ String.fromInt index ++ ".PNG"
+                                , description = ""
+                                }
+                    )
+                    (List.range 1 21)
+            ]
 
 
 main : Program () Model Msg
 main =
-    Browser.document
+    Browser.element
         { init = init
         , update = update
         , view = view
