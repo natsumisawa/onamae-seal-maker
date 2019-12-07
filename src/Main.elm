@@ -128,7 +128,7 @@ view model =
             model
     in
     layout [ Element.Background.color (rgba255 223 107 160 100) ] <|
-        column [ Element.explain Debug.todo, padding 30, spacing 30, centerX, width (px 320) ]
+        column [ padding 30, spacing 30, centerX, width (px 320) ]
             [ el [ size 25, color white, centerX ] (Element.text "おなまえシールめーかー")
             , row [ spacing 3, centerX, width (px 320) ]
                 [ button
