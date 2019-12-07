@@ -128,9 +128,9 @@ view model =
             model
     in
     layout [ Element.Background.color (rgba255 223 107 160 100) ] <|
-        column [ padding 30, spacing 30, centerX ]
-            [ el [ size 40, color white ] (Element.text "おなまえシールめーかー")
-            , row [ spacing 5, centerX, width (px 470) ]
+        column [ Element.explain Debug.todo, padding 30, spacing 30, centerX, width (px 320) ]
+            [ el [ size 25, color white, centerX ] (Element.text "おなまえシールめーかー")
+            , row [ spacing 3, centerX, width (px 320) ]
                 [ button
                     [ case selectedLR of
                         Left ->
@@ -195,14 +195,14 @@ view model =
             --     , label = Element.text "つくる"
             --     }
             , -- if isFinishedChoice then
-              row [ Element.Background.color white ] <|
+              row [ centerX, Element.Background.color white ] <|
                 List.append
                     ((Element.text name
                         :: List.map
                             (\i ->
                                 el [] <|
                                     image
-                                        [ width <| px 50 ]
+                                        [ width <| px 30 ]
                                         { src = "assets/" ++ String.fromInt i ++ ".PNG"
                                         , description = ""
                                         }
@@ -216,7 +216,7 @@ view model =
                         (\i ->
                             el [] <|
                                 image
-                                    [ width <| px 50 ]
+                                    [ width <| px 30 ]
                                     { src = "assets/" ++ String.fromInt i ++ ".PNG"
                                     , description = ""
                                     }
@@ -235,7 +235,7 @@ white =
 
 buttonsView : List Int -> Element.Element Msg
 buttonsView clickedIndexList =
-    wrappedRow [ spacing 5, width (px 470) ] <|
+    wrappedRow [ centerX, spacing 3, width (px 320) ] <|
         List.map
             (\i ->
                 el
@@ -246,7 +246,7 @@ buttonsView clickedIndexList =
                     ]
                 <|
                     image
-                        [ width <| px 50
+                        [ width <| px 30
                         , if clickedIndexList |> List.member i then
                             alpha 0.5
 
